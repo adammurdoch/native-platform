@@ -378,11 +378,11 @@ Java_net_rubygrapefruit_platform_internal_jni_PosixFileSystemFunctions_listFileS
                 }
             }
 
-            env->CallVoidMethod(info, method,
+            env->CallVoidMethod(info, unknownFsMethod,
                 mount_point,
                 file_system_type,
                 device_name,
-                remote, JNI_FALSE, casePreserving);
+                remote);
         }
     }
 
