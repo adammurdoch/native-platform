@@ -38,7 +38,7 @@ public abstract class NativePlatformComponentPlugin implements Plugin<Project> {
 
     private void configureJavaCompatibility(Project project) {
         // Java 9 and later don't support targetting Java 5
-        JavaVersion compatibility = JavaVersion.current().isJava9Compatible() ? JavaVersion.VERSION_1_8 : JavaVersion.VERSION_1_5;
+        JavaVersion compatibility = JavaVersion.VERSION_1_8;
 
         JavaPluginExtension java = project.getExtensions().getByType(JavaPluginExtension.class);
         java.setSourceCompatibility(compatibility);
