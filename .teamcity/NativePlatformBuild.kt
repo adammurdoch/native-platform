@@ -33,7 +33,7 @@ open class NativePlatformBuild(agent: Agent, init: BuildType.() -> Unit = {}) : 
 
     steps {
         gradle {
-            tasks = "clean build${agent.allPublishTasks}"
+            tasks = "clean ${if (agent == Agent.UbuntuAmd64) "testDistributed" else "build"}${agent.allPublishTasks}"
             buildFile = ""
         }
     }
