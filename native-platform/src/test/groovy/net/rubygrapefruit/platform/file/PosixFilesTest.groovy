@@ -15,7 +15,7 @@ import static java.nio.file.attribute.PosixFilePermission.*
 
 @IgnoreIf({ Platform.current().windows })
 class PosixFilesTest extends FilesTest {
-    final PosixFiles files = Native.get(PosixFiles.class)
+    PosixFiles files = Native.get(PosixFiles.class)
 
     @Override
     void assertIsFile(FileInfo stat, File file) {

@@ -6,7 +6,7 @@ import spock.lang.IgnoreIf
 
 @IgnoreIf({ !Platform.current().windows })
 class WindowsFilesTest extends FilesTest {
-    final WindowsFiles files = Native.get(WindowsFiles.class)
+    WindowsFiles files = Native.get(WindowsFiles.class)
 
     @Override
     void assertIsFile(FileInfo stat, File file) {

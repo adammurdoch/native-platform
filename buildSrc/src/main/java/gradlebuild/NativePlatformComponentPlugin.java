@@ -38,7 +38,7 @@ public abstract class NativePlatformComponentPlugin implements Plugin<Project> {
 
     private void configureJavaCompatibility(Project project) {
         // Java 9 and later don't support targetting Java 5
-        JavaVersion compatibility = JavaVersion.current().isJava9Compatible() ? JavaVersion.VERSION_1_6 : JavaVersion.VERSION_1_5;
+        JavaVersion compatibility = JavaVersion.current().isJava9Compatible() ? JavaVersion.VERSION_1_8 : JavaVersion.VERSION_1_5;
 
         JavaPluginExtension java = project.getExtensions().getByType(JavaPluginExtension.class);
         java.setSourceCompatibility(compatibility);
@@ -62,12 +62,15 @@ public abstract class NativePlatformComponentPlugin implements Plugin<Project> {
             Configuration testRuntimeClasspath = project.getConfigurations().getByName("testRuntimeClasspath");
             SourceSetOutput testOutput = javaPluginConvention.getSourceSets().getByName(SourceSet.TEST_SOURCE_SET_NAME).getOutput();
             test.setClasspath(project.files(testRuntimeClasspath, testOutput));
+            test.useJUnitPlatform();
         });
         // We need to add the root project to testImplementation manually, since we changed the wiring
         // for the test task to not use sourceSets.main.output.
         // This allows using dependency substitution for the root project.
         DependencyHandler dependencies = project.getDependencies();
         project.getDependencies().add("testImplementation", project.getDependencies().project(ImmutableMap.of("path", project.getPath())));
-        dependencies.add("testImplementation", "org.spockframework:spock-core:1.3-groovy-2.5");
+        dependencies.add("testImplementation", "org.spockframework:spock-core:2.0-groovy-3.0");
+        dependencies.add("testImplementation", "org.spockframework:spock-junit4:2.0-groovy-3.0");
+        dependencies.add("testImplementation", project.getDependencies().platform("org.codehaus.groovy:groovy-bom:3.0.8"));
     }
 }
