@@ -1,6 +1,8 @@
 package gradlebuild;
 
 import com.google.common.collect.ImmutableList;
+import com.gradle.enterprise.gradleplugin.testdistribution.TestDistributionExtension;
+import com.gradle.enterprise.gradleplugin.testdistribution.internal.TestDistributionExtensionInternal;
 import groovy.util.Node;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
@@ -76,6 +78,7 @@ public abstract class JniPlugin implements Plugin<Project> {
         configureCppTasks(project);
         configureNativeVersionGeneration(project);
         configureJniTest(project);
+        configureDistributedTest(project);
 
         configurePomOfMainJar(project, variants);
 
@@ -117,6 +120,18 @@ public abstract class JniPlugin implements Plugin<Project> {
             });
         });
         project.getTasks().named("check", check -> check.dependsOn(testJni));
+    }
+
+    private void configureDistributedTest(Project project) {
+        project.getTasks().register("testDistributed", Test.class, task -> {
+            TestDistributionExtension distribution = task.getExtensions().getByType(TestDistributionExtension.class);
+            distribution.getEnabled().set(true);
+            // Only run remotely
+            distribution.getMaxLocalExecutors().set(0);
+                // Dogfooding TD against ge-experiment until GE 2021.1 is available on e.grdev.net and ge.gradle.org (and the new TD Gradle plugin version 2.0 is accepted)
+                ((TestDistributionExtensionInternal) distribution).getServer().set(project.uri("https://ge-experiment.grdev.net"));
+                distribution.getRequirements().set(ImmutableList.of("os=linux", "gbt-dogfooding"));
+        });
     }
 
     private void configureNativeVersionGeneration(Project project) {
