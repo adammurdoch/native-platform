@@ -7,8 +7,8 @@ import java.util.Optional;
 public class VersionDetails {
 
     public enum ReleaseRepository {
-        GradleRepoSnapshots("https://repo.gradle.org/gradle/ext-snapshots-local"),
-        GradleRepoReleases("https://repo.gradle.org/gradle/ext-releases-local");
+        GradleRepoSnapshots("https://repo.grdev.net/artifactory/ext-snapshots-local"),
+        GradleRepoReleases("https://repo.grdev.net/artifactory/ext-releases-local");
 
         private final String url;
 
